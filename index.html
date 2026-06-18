@@ -66,7 +66,7 @@
   .bar-track{flex:1;height:8px;background:var(--surface2);border-radius:4px;overflow:hidden}
   .bar-fill{height:100%;border-radius:4px;transition:width .4s ease;min-width:2px}
   .bar-val{width:110px;font-family:'DM Mono',monospace;font-size:11px;color:var(--text2);text-align:right}
-  .notas-box{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px 20px}
+  .notas-box{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px 20px;margin-bottom:20px}
   .notas-label{font-size:11px;color:var(--text2);margin-bottom:8px}
   textarea.notas{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;padding:12px;resize:vertical;min-height:80px;outline:none;transition:border-color .2s}
   textarea.notas:focus{border-color:var(--accent)}
@@ -80,30 +80,30 @@
   .sync-dot.ok{background:var(--pos);box-shadow:0 0 6px var(--pos)}
   .sync-dot.saving{background:var(--gasto-var);animation:pulse .8s infinite}
   .sync-dot.error{background:var(--neg)}
-  .sync-dot.offline{background:#3a3f52}
   @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
-  .btn-drive{display:flex;align-items:center;gap:6px;background:var(--accent);color:#fff;border:none;border-radius:6px;padding:5px 12px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;transition:opacity .15s}
-  .btn-drive:hover{opacity:.85}
-  .btn-drive.secondary{background:transparent;border:1px solid var(--border);color:var(--text2)}
-  .btn-drive.secondary:hover{color:var(--text);border-color:var(--text2)}
-  body.has-syncbar .page{padding-top:48px}
-  body.has-syncbar .sidebar{padding-top:48px}
+  .btn{display:inline-flex;align-items:center;gap:6px;border:none;border-radius:6px;padding:5px 12px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;transition:opacity .15s}
+  .btn:hover{opacity:.85}
+  .btn-primary{background:var(--accent);color:#fff}
+  .btn-secondary{background:transparent;border:1px solid var(--border);color:var(--text2)}
+  .btn-secondary:hover{color:var(--text)}
+  body.has-syncbar .main .page{padding-top:52px}
+  body.has-syncbar .sidebar{padding-top:52px}
 
-  /* LOGIN SCREEN */
+  /* LOGIN */
   #login-screen{position:fixed;inset:0;background:var(--bg);z-index:200;display:flex;align-items:center;justify-content:center}
   .login-box{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:40px;max-width:400px;width:90%;text-align:center}
   .login-logo{font-size:13px;font-weight:700;letter-spacing:.2em;color:var(--accent);text-transform:uppercase;margin-bottom:8px}
   .login-title{font-size:22px;font-weight:700;margin-bottom:8px}
-  .login-sub{font-size:13px;color:var(--text2);margin-bottom:32px;line-height:1.5}
-  .btn-google{display:inline-flex;align-items:center;gap:10px;background:#fff;color:#333;border:none;border-radius:8px;padding:12px 24px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;transition:transform .1s,box-shadow .15s;box-shadow:0 2px 8px rgba(0,0,0,.3)}
+  .login-sub{font-size:13px;color:var(--text2);margin-bottom:32px;line-height:1.6}
+  .btn-google{display:inline-flex;align-items:center;gap:10px;background:#fff;color:#333;border:none;border-radius:8px;padding:12px 24px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;box-shadow:0 2px 8px rgba(0,0,0,.3);transition:transform .1s,box-shadow .15s}
   .btn-google:hover{transform:translateY(-1px);box-shadow:0 4px 16px rgba(0,0,0,.4)}
   .login-note{font-size:11px;color:var(--text3);margin-top:20px;line-height:1.5}
+  .login-error{font-size:12px;color:var(--neg);margin-top:12px;display:none}
 
   @media(max-width:700px){
     .app{grid-template-columns:1fr}
     .sidebar{position:relative;height:auto}
     .page{padding:16px}
-    #sync-bar{flex-wrap:wrap;gap:8px}
   }
 </style>
 </head>
@@ -114,12 +114,13 @@
   <div class="login-box">
     <div class="login-logo">✦ Contadora Lucy ✦</div>
     <div class="login-title">Finanzas Personales 2026</div>
-    <div class="login-sub">Iniciá sesión con tu cuenta de Google para que tus datos se guarden y sincronicen automáticamente en Drive.</div>
+    <div class="login-sub">Iniciá sesión con Google para sincronizar tus datos automáticamente en todos tus dispositivos.</div>
     <button class="btn-google" onclick="signIn()">
       <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M16.51 8H8.98v3h4.3c-.18 1-.74 1.48-1.6 2.04v2.01h2.6a7.8 7.8 0 0 0 2.38-5.88c0-.57-.05-.66-.15-1.18z"/><path fill="#34A853" d="M8.98 17c2.16 0 3.97-.72 5.3-1.94l-2.6-2a4.8 4.8 0 0 1-7.18-2.54H1.83v2.07A8 8 0 0 0 8.98 17z"/><path fill="#FBBC05" d="M4.5 10.52a4.8 4.8 0 0 1 0-3.04V5.41H1.83a8 8 0 0 0 0 7.18l2.67-2.07z"/><path fill="#EA4335" d="M8.98 4.18c1.17 0 2.23.4 3.06 1.2l2.3-2.3A8 8 0 0 0 1.83 5.4L4.5 7.49a4.77 4.77 0 0 1 4.48-3.3z"/></svg>
       Continuar con Google
     </button>
-    <div class="login-note">Solo se accede a tu Drive para leer/guardar<br>el archivo <strong>finanzas2026.json</strong> en tu carpeta raíz.</div>
+    <div class="login-error" id="login-error"></div>
+    <div class="login-note">Tus datos se guardan en Firebase (Google).<br>Solo vos podés ver tu información.</div>
   </div>
 </div>
 
@@ -131,8 +132,7 @@
   </div>
   <div style="display:flex;gap:8px;align-items:center">
     <span style="font-size:11px;color:var(--text3)" id="user-email"></span>
-    <button class="btn-drive secondary" onclick="forceSave()">💾 Guardar ahora</button>
-    <button class="btn-drive secondary" onclick="signOut()" style="font-size:11px">Salir</button>
+    <button class="btn btn-secondary" onclick="signOut()">Salir</button>
   </div>
 </div>
 
@@ -164,7 +164,7 @@
     <div class="page active" id="page-resumen">
       <div class="page-header">
         <h1>📊 Resumen Anual 2026</h1>
-        <p>Vista consolidada · Los datos se sincronizan con tu Google Drive</p>
+        <p>Vista consolidada · Sincronizado con Firebase en tiempo real</p>
       </div>
       <div class="cards-grid">
         <div class="card"><div class="card-label">💰 Ingresos Totales</div><div class="card-value verde" id="r-total-ing">$0</div></div>
@@ -186,16 +186,25 @@
   </main>
 </div>
 
-<!-- Google Identity Services -->
-<script src="https://accounts.google.com/gsi/client" async></script>
+<!-- Firebase SDK -->
+<script type="module">
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+import { getAuth, signInWithPopup, GoogleAuthProvider, signOut as fbSignOut, onAuthStateChanged }
+  from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+import { getFirestore, doc, setDoc, getDoc, onSnapshot }
+  from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
-<script>
 // ═══════════════════════════════════════════════
-// CONFIG — REEMPLAZÁ ESTOS VALORES
+// 🔧 REEMPLAZÁ ESTOS VALORES CON LOS DE TU PROYECTO FIREBASE
 // ═══════════════════════════════════════════════
-const CLIENT_ID = 'TU_CLIENT_ID_AQUI.apps.googleusercontent.com';
-const SCOPES = 'https://www.googleapis.com/auth/drive.file';
-const DRIVE_FILENAME = 'finanzas2026_contadoralucy.json';
+const firebaseConfig = {
+  apiKey:            "AIzaSyA3cfT0tbHbGGOxG70mKzZL1H7pijNUPYY",
+  authDomain:        "finanzas-lucy.firebaseapp.com",
+  projectId:         "finanzas-lucy",
+  storageBucket:     "finanzas-lucy.firebasestorage.app",
+  messagingSenderId: "1031715743806",
+  appId:             "1:1031715743806:web:5e08bf55ed045ff7c8496f"
+};
 
 // ═══════════════════════════════════════════════
 // DATA MODEL
@@ -223,44 +232,50 @@ function emptyData() {
 }
 
 let data = emptyData();
-let driveFileId = null;
-let accessToken = null;
 let saveTimer = null;
-let isDirty = false;
+let currentUser = null;
+let db, auth;
 
 // ═══════════════════════════════════════════════
-// GOOGLE AUTH
+// INIT FIREBASE
 // ═══════════════════════════════════════════════
-let tokenClient;
+const app = initializeApp(firebaseConfig);
+auth = getAuth(app);
+db   = getFirestore(app);
 
-function signIn() {
-  if (!tokenClient) {
-    tokenClient = google.accounts.oauth2.initTokenClient({
-      client_id: CLIENT_ID,
-      scope: SCOPES,
-      callback: async (resp) => {
-        if (resp.error) { setSyncState('error','Error de autenticación'); return; }
-        accessToken = resp.access_token;
-        const info = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
-          headers: { Authorization: `Bearer ${accessToken}` }
-        }).then(r=>r.json());
-        document.getElementById('user-email').textContent = info.email || '';
-        showApp();
-        await loadFromDrive();
-      }
-    });
+onAuthStateChanged(auth, async user => {
+  if (user) {
+    currentUser = user;
+    document.getElementById('user-email').textContent = user.email;
+    showApp();
+    await loadData();
+  } else {
+    currentUser = null;
+    document.getElementById('login-screen').style.display = 'flex';
+    document.getElementById('sync-bar').style.display = 'none';
+    document.getElementById('main-app').style.display = 'none';
+    document.body.classList.remove('has-syncbar');
   }
-  tokenClient.requestAccessToken();
-}
+});
 
-function signOut() {
-  if (accessToken) google.accounts.oauth2.revoke(accessToken);
-  accessToken = null; driveFileId = null;
-  document.getElementById('login-screen').style.display = 'flex';
-  document.getElementById('sync-bar').style.display = 'none';
-  document.getElementById('main-app').style.display = 'none';
-  document.body.classList.remove('has-syncbar');
-}
+// ═══════════════════════════════════════════════
+// AUTH
+// ═══════════════════════════════════════════════
+window.signIn = async () => {
+  try {
+    const provider = new GoogleAuthProvider();
+    await signInWithPopup(auth, provider);
+  } catch(e) {
+    const el = document.getElementById('login-error');
+    el.textContent = 'Error al iniciar sesión. Intentá de nuevo.';
+    el.style.display = 'block';
+    console.error(e);
+  }
+};
+
+window.signOut = async () => {
+  await fbSignOut(auth);
+};
 
 function showApp() {
   document.getElementById('login-screen').style.display = 'none';
@@ -270,42 +285,21 @@ function showApp() {
 }
 
 // ═══════════════════════════════════════════════
-// DRIVE SYNC
+// FIRESTORE SYNC
 // ═══════════════════════════════════════════════
 function setSyncState(state, msg) {
-  const dot = document.getElementById('sync-dot');
-  const txt = document.getElementById('sync-text');
-  dot.className = 'sync-dot ' + state;
-  txt.textContent = msg;
+  document.getElementById('sync-dot').className = 'sync-dot ' + state;
+  document.getElementById('sync-text').textContent = msg;
 }
 
-async function driveRequest(url, options={}) {
-  const resp = await fetch(url, {
-    ...options,
-    headers: { Authorization: `Bearer ${accessToken}`, ...options.headers }
-  });
-  if (resp.status === 401) { setSyncState('error','Sesión expirada — recargá la página'); return null; }
-  return resp;
-}
-
-async function loadFromDrive() {
-  setSyncState('saving','Buscando archivo en Drive...');
+async function loadData() {
+  if (!currentUser) return;
+  setSyncState('saving', 'Cargando datos...');
   try {
-    // Buscar archivo existente
-    const searchResp = await driveRequest(
-      `https://www.googleapis.com/drive/v3/files?q=name='${DRIVE_FILENAME}' and trashed=false&fields=files(id,name,modifiedTime)`
-    );
-    if (!searchResp) return;
-    const { files } = await searchResp.json();
-
-    if (files && files.length > 0) {
-      driveFileId = files[0].id;
-      const fileResp = await driveRequest(
-        `https://www.googleapis.com/drive/v3/files/${driveFileId}?alt=media`
-      );
-      if (!fileResp) return;
-      const saved = await fileResp.json();
-      // Merge con estructura vacía para no perder keys nuevas
+    const ref = doc(db, 'usuarios', currentUser.uid, 'finanzas', '2026');
+    const snap = await getDoc(ref);
+    if (snap.exists()) {
+      const saved = snap.data();
       const fresh = emptyData();
       Object.keys(fresh).forEach(mi => {
         if (saved[mi]) {
@@ -316,65 +310,34 @@ async function loadFromDrive() {
         }
       });
       data = fresh;
-      setSyncState('ok', `Sincronizado · ${new Date().toLocaleTimeString('es-AR')}`);
-    } else {
-      // Crear archivo nuevo
-      setSyncState('saving','Creando archivo en Drive...');
-      await saveToDrive();
     }
+    setSyncState('ok', `Sincronizado · ${new Date().toLocaleTimeString('es-AR')}`);
     renderAll();
   } catch(e) {
-    setSyncState('error','Error al cargar datos');
+    setSyncState('error', 'Error al cargar');
     console.error(e);
     renderAll();
   }
 }
 
-async function saveToDrive() {
-  if (!accessToken) return;
-  setSyncState('saving','Guardando...');
+async function saveData() {
+  if (!currentUser) return;
+  setSyncState('saving', 'Guardando...');
   try {
-    const body = JSON.stringify(data);
-    let resp;
-    if (driveFileId) {
-      resp = await driveRequest(
-        `https://www.googleapis.com/upload/drive/v3/files/${driveFileId}?uploadType=media`,
-        { method:'PATCH', headers:{'Content-Type':'application/json'}, body }
-      );
-    } else {
-      // Crear metadata primero
-      const metaResp = await driveRequest(
-        'https://www.googleapis.com/drive/v3/files',
-        { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ name: DRIVE_FILENAME, mimeType:'application/json' }) }
-      );
-      if (!metaResp) return;
-      const meta = await metaResp.json();
-      driveFileId = meta.id;
-      resp = await driveRequest(
-        `https://www.googleapis.com/upload/drive/v3/files/${driveFileId}?uploadType=media`,
-        { method:'PATCH', headers:{'Content-Type':'application/json'}, body }
-      );
-    }
-    if (resp && resp.ok) {
-      isDirty = false;
-      setSyncState('ok', `Guardado en Drive · ${new Date().toLocaleTimeString('es-AR')}`);
-    } else {
-      setSyncState('error','Error al guardar');
-    }
+    const ref = doc(db, 'usuarios', currentUser.uid, 'finanzas', '2026');
+    await setDoc(ref, data);
+    setSyncState('ok', `Guardado · ${new Date().toLocaleTimeString('es-AR')}`);
   } catch(e) {
-    setSyncState('error','Sin conexión');
+    setSyncState('error', 'Error al guardar');
     console.error(e);
   }
 }
 
 function scheduleSave() {
-  isDirty = true;
-  setSyncState('saving','Guardando...');
+  setSyncState('saving', 'Guardando...');
   clearTimeout(saveTimer);
-  saveTimer = setTimeout(saveToDrive, 1500);
+  saveTimer = setTimeout(saveData, 1500);
 }
-
-async function forceSave() { clearTimeout(saveTimer); await saveToDrive(); }
 
 // ═══════════════════════════════════════════════
 // FORMAT
@@ -393,7 +356,8 @@ function calcMes(mi) {
   const totalFijo = Object.values(m.fijos).reduce((a,b)=>a+(+b||0),0);
   const totalVar  = Object.values(m.variables).reduce((a,b)=>a+(+b||0),0);
   const totalAho  = Object.values(m.ahorros).reduce((a,b)=>a+(+b||0),0);
-  return { totalIng, totalFijo, totalVar, totalAho, disponible: totalIng-totalFijo, saldo: totalIng-totalFijo-totalVar-totalAho };
+  return { totalIng, totalFijo, totalVar, totalAho,
+           disponible: totalIng-totalFijo, saldo: totalIng-totalFijo-totalVar-totalAho };
 }
 
 // ═══════════════════════════════════════════════
@@ -407,13 +371,14 @@ function renderMesPage(mi) {
       <td>${k}</td>
       <td><input class="input-cell" type="number" step="1" min="0"
         value="${m[sec][k]||0}"
-        onchange="setVal(${mi},'${sec}','${k.replace(/'/g,"\\'")}',this.value)"
+        data-mi="${mi}" data-sec="${sec}" data-key="${k.replace(/"/g,'&quot;')}"
+        onchange="handleChange(this)"
         onfocus="this.select()"/></td>
     </tr>`).join('');
 
   return `
   <div class="page" id="page-mes-${mi}">
-    <div class="page-header"><h1>${MESES[mi]} 2026</h1><p>Ingresá tus datos · Se guardan automáticamente en Drive</p></div>
+    <div class="page-header"><h1>${MESES[mi]} 2026</h1><p>Ingresá tus datos · Se sincronizan automáticamente</p></div>
     <div class="cards-grid">
       <div class="card"><div class="card-label">💰 Ingresos</div><div class="card-value verde" id="m${mi}-ing">${fmt(c.totalIng)}</div></div>
       <div class="card"><div class="card-label">🏠 Gastos Fijos</div><div class="card-value rojo" id="m${mi}-fijo">${fmt(c.totalFijo)}</div></div>
@@ -460,26 +425,33 @@ function renderMesPage(mi) {
     </div>
     <div class="notas-box">
       <div class="notas-label">📝 Notas del mes</div>
-      <textarea class="notas" placeholder="Anotá tus reflexiones, aprendizajes o metas..." oninput="setNota(${mi},this.value)">${m.notas||''}</textarea>
+      <textarea class="notas" placeholder="Anotá tus reflexiones..." data-mi="${mi}" oninput="handleNota(this)">${m.notas||''}</textarea>
     </div>
   </div>`;
 }
 
 // ═══════════════════════════════════════════════
-// UPDATE UI
+// EVENT HANDLERS (globales)
 // ═══════════════════════════════════════════════
-function setVal(mi, sec, key, val) {
-  data[mi][sec][key] = parseFloat(val)||0;
+window.handleChange = (el) => {
+  const mi = +el.dataset.mi, sec = el.dataset.sec, key = el.dataset.key;
+  data[mi][sec][key] = parseFloat(el.value)||0;
   updateMesUI(mi);
   updateResumenUI();
   scheduleSave();
-}
-function setNota(mi, val) { data[mi].notas=val; scheduleSave(); }
+};
+window.handleNota = (el) => {
+  data[+el.dataset.mi].notas = el.value;
+  scheduleSave();
+};
 
+// ═══════════════════════════════════════════════
+// UPDATE UI
+// ═══════════════════════════════════════════════
 function updateMesUI(mi) {
   const c = calcMes(mi);
   const q = id => document.getElementById(id);
-  const s = (id, v) => { const el=q(id); if(el) el.textContent=fmt(v); };
+  const s = (id,v) => { const el=q(id); if(el) el.textContent=fmt(v); };
   s(`m${mi}-ing`,c.totalIng); s(`m${mi}-fijo`,c.totalFijo); s(`m${mi}-var`,c.totalVar); s(`m${mi}-aho`,c.totalAho);
   s(`m${mi}-t-ing`,c.totalIng); s(`m${mi}-t-fijo`,c.totalFijo); s(`m${mi}-t-var`,c.totalVar); s(`m${mi}-t-aho`,c.totalAho);
   s(`m${mi}-disp`,c.disponible);
@@ -490,7 +462,7 @@ function updateMesUI(mi) {
 }
 
 function buildAnualTable(tableId, items, sec, colorClass) {
-  const tbl = document.getElementById(tableId); if(!tbl) return;
+  const tbl=document.getElementById(tableId); if(!tbl) return;
   let html=`<thead><tr><th>Concepto</th>${MESES_SHORT.map(m=>`<th>${m}</th>`).join('')}<th class="total-col">Total</th></tr></thead><tbody>`;
   items.forEach(k=>{
     html+=`<tr><td>${k}</td>`;
@@ -541,7 +513,7 @@ function renderBarChart() {
 // ═══════════════════════════════════════════════
 // NAVIGATION
 // ═══════════════════════════════════════════════
-function showPage(id) {
+window.showPage = (id) => {
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
   const page=document.getElementById('page-'+id);
@@ -550,7 +522,7 @@ function showPage(id) {
     if(n.getAttribute('onclick')&&n.getAttribute('onclick').includes(`'${id}'`)) n.classList.add('active');
   });
   if(id==='resumen') updateResumenUI();
-}
+};
 
 // ═══════════════════════════════════════════════
 // RENDER ALL
